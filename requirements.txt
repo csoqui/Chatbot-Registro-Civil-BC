@@ -1,0 +1,34 @@
+# --- Instalación (raíz del repo, Python 3.10+) ---
+#   python -m venv .venv
+#   .\.venv\Scripts\Activate.ps1          # PowerShell
+#   .\.venv\Scripts\activate.bat          # CMD
+#   pip install -r requirements.txt
+#   python -m spacy download es_core_news_lg
+#
+# --- Ejecutar chatbot en consola (venv activado) ---
+#   python -m pln_chatbot
+#   python chatbot.py
+#
+# --- Ejecutar en Telegram (token de @BotFather) ---
+#   $env:TELEGRAM_BOT_TOKEN="SU_TOKEN"    # PowerShell
+#   python -m pln_chatbot.telegram_bot
+#
+# Guía paso a paso: README.md
+#
+# Entorno reproducible (ajuste versiones si su Python lo requiere).
+nltk==3.9.1
+spacy==3.8.7
+python-telegram-bot==21.10
+datasets==2.21.0
+scikit-learn==1.5.2
+SpeechRecognition==3.10.4
+PyAudio==0.2.14
+
+# Tras instalar dependencias, ejecute (una vez por entorno):
+#   python -m spacy download es_core_news_lg
+# NLTK descargará punkt/wordnet al iniciar el agente si faltan.
+#
+# Índice RAG (opcional): el archivo .joblib NO va en el repo (ver README.md).
+# Tras `pip install -r requirements.txt`, generar índice con:
+#   python -m pln_chatbot.rag_ingest
+# Escribe por defecto: data/rag/rag_tech_index.joblib (coincide con PLN_CHATBOT_RAG_INDEX en config.py).
