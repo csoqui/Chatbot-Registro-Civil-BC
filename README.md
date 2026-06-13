@@ -6,6 +6,66 @@ El código está organizado en módulos pequeños para que se vea **qué hace ca
 
 ---
 
+## Adaptaciones realizadas para el Proyecto Integrador
+
+Este repositorio fue adaptado a partir de un chatbot base de Procesamiento de Lenguaje Natural para convertirlo en un asistente especializado en el dominio del **Registro Civil de Baja California**.
+
+Las principales adecuaciones realizadas fueron:
+
+- Se creó una base de conocimiento propia en `data/knowledge.registro_civil_bc.json`.
+- Se agregó entrada por voz en consola mediante el comando `/voz`, usando `SpeechRecognition` y `PyAudio`.
+- Se integró el dominio de Registro Civil BC al flujo conversacional del chatbot.
+- Se ajustó el bot de Telegram para utilizar el dominio cargado dinámicamente.
+- Se implementó un RAG local para consultar información de un Manual de Procedimientos de la Dirección del Registro Civil.
+- Se creó el script `pln_chatbot/rag_ingest_registro_civil.py` para realizar la ingesta documental y generar el índice `data/rag/rag_registro_civil_bc_index.joblib`.
+- Se documentaron los cambios principales en `Resumen.md`, `Guion_video.md` y `cambios.md`.
+
+### Ejecución con dominio Registro Civil BC
+
+```bash
+cd ~/Documents/Chatbot
+source venv/bin/activate
+
+export PLN_CHATBOT_KNOWLEDGE="data/knowledge.registro_civil_bc.json"
+export PLN_CHATBOT_USE_RAG=1
+export PLN_CHATBOT_RAG_INDEX="data/rag/rag_registro_civil_bc_index.joblib"
+
+venv/bin/python chatbot.py
+```
+
+### Uso de entrada por voz
+
+Dentro de la consola del chatbot:
+
+```text
+/voz
+```
+
+El sistema escuchará por micrófono, convertirá la voz a texto y procesará la consulta con el mismo pipeline de PLN.
+
+### Generación del índice RAG de Registro Civil BC
+
+```bash
+venv/bin/python -m pln_chatbot.rag_ingest_registro_civil \
+  --source data/rag/registro_civil_bc \
+  --output data/rag/rag_registro_civil_bc_index.joblib
+```
+
+### Ejecución del bot de Telegram
+
+```bash
+export TELEGRAM_BOT_TOKEN="TOKEN_DEL_BOT"
+export PLN_CHATBOT_KNOWLEDGE="data/knowledge.registro_civil_bc.json"
+export PLN_CHATBOT_USE_RAG=1
+export PLN_CHATBOT_RAG_INDEX="data/rag/rag_registro_civil_bc_index.joblib"
+
+venv/bin/python -m pln_chatbot.telegram_bot
+```
+
+> Nota: El token real de Telegram no debe subirse al repositorio.
+
+---
+
 ## ¿Qué es y para qué sirve?
 
 Es un **chatbot por turnos**: el usuario escribe (o envía mensajes en Telegram) y el sistema devuelve una respuesta basada en:
